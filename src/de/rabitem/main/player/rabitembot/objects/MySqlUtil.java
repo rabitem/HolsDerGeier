@@ -23,10 +23,10 @@ public interface MySqlUtil {
         RabitemBot.mySql.update(query);
     }
 
-    public default <T> T getAttribute(String s, String s2, String from, String where, Class<T> clazz, String comparable) {
+    public default <T> T getAttribute(String s, String s2, String from, String where, Class<T> clazz, String comperator) {
         T output = null;
         String query = "select " + s + " from holsdergeier." + from + " " +
-                "where " + where + " = \"" + comparable + "\";";
+                "where " + where + " = \"" + comperator + "\";";
         ResultSet resultSet = RabitemBot.mySql.query(query);
         try {
             output = resultSet.getObject(s2, clazz);

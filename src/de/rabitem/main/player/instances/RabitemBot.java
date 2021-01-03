@@ -83,6 +83,8 @@ public class RabitemBot extends Player {
         System.out.println("Map Stats after Game");
         enemyBot.setLastPlayed(new Timestamp(System.currentTimeMillis()));
         System.out.println("Successfully mapped Stats after Game");
+
+        RabitemBot.mySql.close();
     }
 
     @Override

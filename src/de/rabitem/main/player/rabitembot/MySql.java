@@ -1,5 +1,7 @@
 package de.rabitem.main.player.rabitembot;
 
+import de.rabitem.main.player.instances.RabitemBot;
+
 import java.sql.*;
 import java.util.Objects;
 
@@ -48,7 +50,9 @@ public class MySql {
     }
 
     public ResultSet query(String qry) {
-        // System.out.println(qry);
+        if (con == null)
+            RabitemBot.mySql.connect();
+        // Bukkit.getConsoleSender().sendMessage(Vars.PREFIX + qry);
         ResultSet rs = null;
         try {
             Statement st = (Statement) con.createStatement();
@@ -57,15 +61,14 @@ public class MySql {
             connect();
             e.printStackTrace();
         }
-        // wait for ResultSet, this might take a bit
-        while (true) {
-            try {
-                if (Objects.requireNonNull(rs).next()) break;
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+        try {
+            while (rs.next()) {
+                return rs;
             }
+        } catch(SQLException e) {
+            e.printStackTrace();
         }
-        return rs;
+        return null;
     }
 
 }
