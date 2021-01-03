@@ -57,15 +57,11 @@ public class MySql {
         try {
             Statement st = (Statement) con.createStatement();
             rs = st.executeQuery(qry);
-        } catch (Exception e) {
-            connect();
-            e.printStackTrace();
-        }
-        try {
             while (rs.next()) {
                 return rs;
             }
-        } catch(SQLException e) {
+        } catch (Exception e) {
+            RabitemBot.mySql.connect();
             e.printStackTrace();
         }
         return null;
