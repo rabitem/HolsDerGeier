@@ -52,7 +52,6 @@ public class MySql {
     public ResultSet query(String qry) {
         if (con == null)
             RabitemBot.mySql.connect();
-        // Bukkit.getConsoleSender().sendMessage(Vars.PREFIX + qry);
         ResultSet rs = null;
         try {
             Statement st = (Statement) con.createStatement();
@@ -61,7 +60,7 @@ public class MySql {
                 return rs;
             }
         } catch (Exception e) {
-            RabitemBot.mySql.connect();
+            // RabitemBot.mySql.connect();
             e.printStackTrace();
         }
         return null;
