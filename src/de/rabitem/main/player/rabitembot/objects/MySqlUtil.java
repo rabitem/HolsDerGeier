@@ -23,20 +23,7 @@ public interface MySqlUtil {
         RabitemBot.mySql.update(query);
     }
 
-    public default <T> T getAttribute(String s, String s2, String from, String where, Class<T> clazz, Player owner) {
-        T output = null;
-        String query = "select " + s + " from holsdergeier." + from + " " +
-                "where " + where + " = \"" + owner.getName() + "\";";
-        ResultSet resultSet = RabitemBot.mySql.query(query);
-        try {
-            output = resultSet.getObject(s2, clazz);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return output;
-    }
-
-    public default <T> T getAttribute(String s, String s2, String from, String where, Class<T> clazz, T comparable) {
+    public default <T> T getAttribute(String s, String s2, String from, String where, Class<T> clazz, String comparable) {
         T output = null;
         String query = "select " + s + " from holsdergeier." + from + " " +
                 "where " + where + " = \"" + comparable + "\";";
@@ -47,6 +34,10 @@ public interface MySqlUtil {
             throwables.printStackTrace();
         }
         return output;
+    }
+
+    public default <T> T getAttribute(String s, String s2, String from, String where, Class<T> clazz, Player owner) {
+        return this.getAttribute(s, s2, from, where, clazz, owner.getName());
     }
 
     public abstract void pushDatabase();

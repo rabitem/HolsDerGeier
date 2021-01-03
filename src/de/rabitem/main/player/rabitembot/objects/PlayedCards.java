@@ -34,11 +34,11 @@ public class PlayedCards implements MySqlUtil{
 
     @Override
     public boolean existsInDatabase() {
-        return this.getAttribute("count(*) as count", "count", "playedcards", "Bot",  Integer.class, this.bot.getId()) == 1;
+        return this.getAttribute("count(*) as count", "count", "playedcards", "Bot",  Integer.class, String.valueOf(this.bot.getId())) == 1;
     }
 
     public int getId() {
-        return this.getAttribute("idPlayedCards", "idPlayedCards", "playedcards", "Bot",  Integer.class, this.bot.getId());
+        return this.getAttribute("idPlayedCards", "idPlayedCards", "playedcards", "Bot",  Integer.class, String.valueOf(this.bot.getId()));
     }
 
     public Bot getBot() {
