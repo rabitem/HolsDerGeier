@@ -103,6 +103,8 @@ public class RabitemBot extends Player {
     }
 
     private PlayerCard staticStreategy(int pointCardValue) {
+        // todo bessere Gewichtung
+        // todo was sind die turning points? big points? welche muss ich gewinnen --> 3 Alternativen bestimmen
         switch (pointCardValue) {
             case 10:
             case 9:

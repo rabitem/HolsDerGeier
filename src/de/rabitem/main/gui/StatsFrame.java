@@ -103,7 +103,7 @@ public class StatsFrame extends JPanel {
                     return;
                 }
             }
-        }, 500, 500);
+        }, 500, 20);
         JButton bClose = new JButton("Close");
         bClose.setPreferredSize(new Dimension(120, 30));
         bClose.setUI(new StyledButtonUI());
