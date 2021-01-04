@@ -1,6 +1,7 @@
 package de.rabitem.main.player.rabitembot;
 
 import de.rabitem.main.player.instances.RabitemBot;
+import de.rabitem.main.player.rabitembot.objects.RabitemUtil;
 
 import java.sql.*;
 import java.util.Objects;
@@ -22,6 +23,8 @@ public class MySql {
         try {
             con = DriverManager.getConnection("jdbc:mysql://" + host + ":3306/" + database + "?autoReconnect=true",
                     user, password);
+            if (RabitemUtil.OUTPUT)
+                System.out.println(RabitemUtil.PREFIX + "Succesfully established MySQL connection.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

@@ -7,6 +7,7 @@ import de.rabitem.main.player.rabitembot.MySql;
 import de.rabitem.main.player.rabitembot.objects.Bot;
 import de.rabitem.main.player.rabitembot.objects.Card;
 import de.rabitem.main.player.rabitembot.objects.PlayedCards;
+import de.rabitem.main.player.rabitembot.objects.RabitemUtil;
 import de.rabitem.main.util.Util;
 
 import java.sql.Timestamp;
@@ -26,7 +27,8 @@ public class RabitemBot extends Player {
         super(name);
 
         // connect to local mysql database
-        System.out.println("Establishing MySQL connection...");
+        if (RabitemUtil.OUTPUT)
+            System.out.println(RabitemUtil.PREFIX + "Establishing MySQL connection...");
         if (Objects.isNull(mySql))
             RabitemBot.mySql = new MySql("127.0.0.1", "holsdergeier", "root", "password");
     }
@@ -44,7 +46,8 @@ public class RabitemBot extends Player {
                 enemyBot = new Bot(HolsDerGeierUtil.getActivePlayers().get(0));
         }
         // register each enemy in database
-        System.out.println("Setting up Stats before Game");
+        if (RabitemUtil.OUTPUT)
+            System.out.println(RabitemUtil.PREFIX + "Setting up Stats before Game");
         if (!enemyBot.existsInDatabase()) {
             enemyBot.pushDatabase();
         }
@@ -54,13 +57,15 @@ public class RabitemBot extends Player {
             this.oddlyDistributed = this.areNumbersOddlyDistributed();
         }
 
-        System.out.println("Successfully set up Stats before Game");
+        if (RabitemUtil.OUTPUT)
+            System.out.println(RabitemUtil.PREFIX + "Successfully set up Stats before Game");
     }
 
     @Override
     public void afterRound(ArrayList<Player> winner) {
         // map round to database
-        System.out.println("Map Stats after Round");
+        if (RabitemUtil.OUTPUT)
+            System.out.println(RabitemUtil.PREFIX + "Map Stats after Round");
 
         PlayedCards playedCards = new PlayedCards(enemyBot);
         playedCards.getCard(enemyBot.getOwner().getLastMove()).incCardUsed();
@@ -74,15 +79,19 @@ public class RabitemBot extends Player {
         } else {
             enemyBot.addLose();
         }
-        System.out.println("Successfully mapped Stats after Round");
+        if (RabitemUtil.OUTPUT)
+            System.out.println(RabitemUtil.PREFIX + "Successfully mapped Stats after Round");
     }
 
     @Override
     public void afterGame(ArrayList<Player> winner) {
         // map Game
-        System.out.println("Map Stats after Game");
+        if (RabitemUtil.OUTPUT)
+            System.out.println(RabitemUtil.PREFIX + "Map Stats after Game");
         enemyBot.setLastPlayed(new Timestamp(System.currentTimeMillis()));
-        System.out.println("Successfully mapped Stats after Game");
+
+        if (RabitemUtil.OUTPUT)
+            System.out.println(RabitemUtil.PREFIX + "Successfully mapped Stats after Game");
 
         RabitemBot.mySql.close();
     }
@@ -97,22 +106,26 @@ public class RabitemBot extends Player {
     }
 
     private PlayerCard staticStreategy(int pointCardValue) {
-        switch(pointCardValue) {
+        switch (pointCardValue) {
             case 10:
             case 9:
-            case 8: return getCardsInArray(13, 15);
+            case 8:
+                return getCardsInArray(13, 15);
             case 7:
             case 6:
-            case 5: return getCardsInArray(10, 12);
+            case 5:
+                return getCardsInArray(10, 12);
             case 4:
             case 3:
-            case 2: return getCardsInArray(7, 9);
+            case 2:
+                return getCardsInArray(7, 9);
             case 1:
             case -1:
             case -2:
             case -3:
             case -4:
-            case -5: return getCardsInArray(1, 6);
+            case -5:
+                return getCardsInArray(1, 6);
             default:
                 return null;
         }
