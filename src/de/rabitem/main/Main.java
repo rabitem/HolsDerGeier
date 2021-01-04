@@ -113,7 +113,7 @@ public class Main extends HolsDerGeier {
             Object item = comboBox.getSelectedItem();
             if (item != null && enabledPlayers.contains(item.toString())) {
                 try {
-                    holsDerGeierUtil.activatePlayer(holsDerGeierUtil.getPlayerInstance(item.toString(), "Player " + count));
+                    holsDerGeierUtil.activatePlayer(holsDerGeierUtil.getPlayerInstance(item.toString(), item.toString()));
                 } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
                     System.out.println("Failed to create a new instance of " + item.toString() + ":");
                     e.printStackTrace();

@@ -42,8 +42,8 @@ public class RabitemBot extends Player {
         this.checkSetup();
 
         for (Player p : HolsDerGeierUtil.getActivePlayers()) {
-            if (!p.equals(this))
-                enemyBot = new Bot(HolsDerGeierUtil.getActivePlayers().get(0));
+            if (!p.getName().equals(this.getName()))
+                enemyBot = new Bot(p);
         }
         // register each enemy in database
         RabitemUtil.outputMessage("Setting up Stats before Game");
@@ -130,7 +130,7 @@ public class RabitemBot extends Player {
 
     private PlayerCard getCardsInArray(int from, int to) {
         PlayerCard playerCard = new PlayerCard(Util.random(from, to));
-        return this.enemyBot.getOwner().canUse(playerCard) ? playerCard : this.getCardsInArray(from, to);
+        return this.canUse(playerCard) ? playerCard : this.getCardsInArray(from, to);
     }
 
     private PlayerCard dynamicStrategy() {
