@@ -157,11 +157,16 @@ public abstract class HolsDerGeier implements OnSetupFinished {
             // HolsDerGeierUtil.getActivePlayers().forEach(System.out::println);
             // System.out.println();
 
+            HashMap<Player, PlayerCard> dudelu = new HashMap<>();
             for (Player p : HolsDerGeierUtil.getActivePlayers()) {
                 PlayerCard value = p.getNextCard(currentPointCard.getValue());
+                dudelu.put(p, value);
                 values.add(value.getValue());
                 usedCards.put(p, value);
             }
+
+            dudelu.forEach(Player::setLastMove);
+            dudelu.clear();
 
             /* usedCards.forEach((k, v) -> {
                 System.out.printf("Player: %s, Card: %d%n", k.getName(), v.getValue());

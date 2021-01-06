@@ -147,7 +147,7 @@ public abstract class Player {
      *
      * @param lastMove
      */
-    protected final void setLastMove(PlayerCard lastMove) {
+    public final void setLastMove(PlayerCard lastMove) {
         this.lastMove = lastMove;
     }
 
@@ -167,14 +167,13 @@ public abstract class Player {
      */
 
     public final PlayerCard getNextCard(final int pointCardValue) {
-        final PlayerCard pC = getNextCardFromPlayer(pointCardValue);
+        final PlayerCard pC21576 = getNextCardFromPlayer(pointCardValue);
         try {
-            this.setLastMove(pC);
-            this.remove(pC);
+            this.remove(pC21576);
         } catch (IllegalMoveException e) {
             System.out.println(e.getMessage());
         }
-        return pC;
+        return pC21576;
     }
 
     /**
