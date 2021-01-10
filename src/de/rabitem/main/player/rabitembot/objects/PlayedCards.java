@@ -1,7 +1,7 @@
 package de.rabitem.main.player.rabitembot.objects;
 
 import de.rabitem.main.card.instances.PlayerCard;
-import de.rabitem.main.player.instances.RabitemBot;
+import de.rabitem.main.player.instances.Felix;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,7 @@ public class PlayedCards implements MySqlUtil{
         }
         String query = "insert into holsdergeier.playedcards(Bot) " +
                 "values(" + this.bot.getId() + ");";
-        RabitemBot.mySql.update(query);
+        Felix.mySql.update(query);
         // this.id = this.getId();
     }
 

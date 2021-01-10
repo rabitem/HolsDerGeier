@@ -92,7 +92,7 @@ public abstract class Player {
     protected final void remove(final PlayerCard c) throws IllegalMoveException {
         if (canUse(c)) {
             cards.remove(c);
-            lastMove = c;
+            // lastMove = c;
         } else {
             throw new IllegalMoveException("This move is not permitted! You already used this card...");
         }
@@ -157,7 +157,7 @@ public abstract class Player {
      * @return
      */
     public final boolean isReady() {
-        return cards.size() > 0 && lastMove == null;
+        return !cards.isEmpty() && lastMove == null;
     }
 
     /**

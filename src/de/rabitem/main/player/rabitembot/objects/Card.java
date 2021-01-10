@@ -1,6 +1,6 @@
 package de.rabitem.main.player.rabitembot.objects;
 
-import de.rabitem.main.player.instances.RabitemBot;
+import de.rabitem.main.player.instances.Felix;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +18,7 @@ public class Card implements MySqlUtil {
     public boolean existsInDatabase() {
         String query = "select count(*) as count from holsdergeier.card where fk_PlayedCards = " +
                 this.fk_PlayedCards.getBot().getId() + " && Value = " + this.value + ";";
-        ResultSet resultSet = RabitemBot.mySql.query(query);
+        ResultSet resultSet = Felix.mySql.query(query);
         try {
             return resultSet.getInt("count") == 1;
         } catch (SQLException throwables) {
@@ -35,14 +35,15 @@ public class Card implements MySqlUtil {
         }
         String query = "insert into holsdergeier.card(Value, fk_PlayedCards)" +
                 "values(" + this.value + "," + fk_PlayedCards.getId() + ");";
-        RabitemBot.mySql.update(query);
+        Felix.mySql.update(query);
     }
 
-    public void incCardUsed() {
+    public void incCardUsed(int pos) {
+        String s = pos < 0 ? "Minus" + pos * -1 : String.valueOf(pos);
         String query = "update holsdergeier.card " +
-                "set TimesUsedPos" + this.value + " = TimesUsedPos1 + 1 " +
+                "set TimesUsedFor" + s + " = TimesUsedFor" + s + " + 1 " +
                 "where fk_PlayedCards = " + this.fk_PlayedCards.getId() + " && Value = " + this.value + ";";
-        RabitemBot.mySql.update(query);
+        Felix.mySql.update(query);
     }
 
     public int getValue() {
@@ -50,12 +51,14 @@ public class Card implements MySqlUtil {
     }
 
     public double getProbability(int pos) {
-        String query = "select TimesUsedPos" + pos + " from holsdergeier.card where fk_PlayedCards = " + this.fk_PlayedCards.getId() +
-                " && Value = " + this.value;
-        ResultSet resultSet = RabitemBot.mySql.query(query);
+        String s = pos < 0 ? "Minus" + pos * -1 : String.valueOf(pos);
+        String query = "select TimesUsedFor" + s + " from holsdergeier.card where fk_PlayedCards = " + this.fk_PlayedCards.getId() +
+                " && Value = " + this.value + ";";
+        // System.out.println(query);
+        ResultSet resultSet = Felix.mySql.query(query);
         try {
-            return resultSet.getInt("TimesUsedPos" + pos)/
-                    this.fk_PlayedCards.getBot().getTotalRoundsPlayedAgainst();
+            int i = resultSet.getInt(1);
+            return (double) i/(this.fk_PlayedCards.getBot().getTotalRoundsPlayedAgainst()/15.0);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

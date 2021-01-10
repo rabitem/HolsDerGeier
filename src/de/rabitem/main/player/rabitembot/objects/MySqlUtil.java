@@ -1,7 +1,7 @@
 package de.rabitem.main.player.rabitembot.objects;
 
 import de.rabitem.main.player.Player;
-import de.rabitem.main.player.instances.RabitemBot;
+import de.rabitem.main.player.instances.Felix;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,14 +20,14 @@ public interface MySqlUtil {
         String query = "update holsdergeier." + from + " " +
                 "set " + s + " = " + newValue + " " +
                 "where Name = \"" + owner.getName() + "\";";
-        RabitemBot.mySql.update(query);
+        Felix.mySql.update(query);
     }
 
     public default <T> T getAttribute(String s, String s2, String from, String where, Class<T> clazz, String comperator) {
         T output = null;
         String query = "select " + s + " from holsdergeier." + from + " " +
                 "where " + where + " = \"" + comperator + "\";";
-        ResultSet resultSet = RabitemBot.mySql.query(query);
+        ResultSet resultSet = Felix.mySql.query(query);
         try {
             output = resultSet.getObject(s2, clazz);
         } catch (SQLException throwables) {

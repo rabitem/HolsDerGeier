@@ -1,10 +1,9 @@
 package de.rabitem.main.player.rabitembot;
 
-import de.rabitem.main.player.instances.RabitemBot;
+import de.rabitem.main.player.instances.Felix;
 import de.rabitem.main.player.rabitembot.objects.RabitemUtil;
 
 import java.sql.*;
-import java.util.Objects;
 
 public class MySql {
 
@@ -43,7 +42,7 @@ public class MySql {
     public void update(String qry) {
         // System.out.println(qry);
         try {
-            try (Statement st = (Statement) con.createStatement()) {
+            try (Statement st = con.createStatement()) {
                 st.executeUpdate(qry);
             }
         } catch (SQLException e) {
@@ -54,10 +53,10 @@ public class MySql {
 
     public ResultSet query(String qry) {
         if (con == null)
-            RabitemBot.mySql.connect();
+            Felix.mySql.connect();
         ResultSet rs = null;
         try {
-            Statement st = (Statement) con.createStatement();
+            Statement st = con.createStatement();
             rs = st.executeQuery(qry);
             while (rs.next()) {
                 return rs;

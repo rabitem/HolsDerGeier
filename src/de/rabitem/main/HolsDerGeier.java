@@ -80,6 +80,7 @@ public abstract class HolsDerGeier implements OnSetupFinished {
     /**
      * Starts the game engine
      */
+    int currentRound;
     public void startGame() throws IllegalPlayerSize, IllegalMatchSetup {
         /**
          * Setup player
@@ -102,6 +103,7 @@ public abstract class HolsDerGeier implements OnSetupFinished {
         }
 
         // System.out.println("Match setup successful! Starting Game...");
+        currentRound = 0;
         HolsDerGeierUtil.getActivePlayers().forEach(Player::setupBeforeGameStarts);
         runGame();
     }
@@ -124,7 +126,7 @@ public abstract class HolsDerGeier implements OnSetupFinished {
         rounds = pointCards.size();
 
         // current round
-        int currentRound = 0;
+        currentRound = 0;
 
         // values of each player
         ArrayList<Integer> values = new ArrayList<>();
@@ -135,7 +137,7 @@ public abstract class HolsDerGeier implements OnSetupFinished {
         // winning card value
         int winningValue;
 
-        HashMap<Player, PlayerCard> usedCards = new HashMap<Player, PlayerCard>();
+        HashMap<Player, PlayerCard> usedCards = new HashMap<>();
 
         // System.out.println("We are about to play: " + rounds + " rounds with " + holsDerGeierUtil.getActivePlayersSize() + " Players!");
         /**
@@ -266,5 +268,9 @@ public abstract class HolsDerGeier implements OnSetupFinished {
         Main.getHolsDerGeierUtil().mapPlayerPlaces(mapPlayers);
 
         mapPlayers.forEach((k, v) -> k.mapTotalPoints());
+    }
+
+    public int getCurrentRound() {
+        return currentRound;
     }
 }

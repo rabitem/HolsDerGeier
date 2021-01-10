@@ -1,7 +1,7 @@
 package de.rabitem.main.player.rabitembot.objects;
 
 import de.rabitem.main.player.Player;
-import de.rabitem.main.player.instances.RabitemBot;
+import de.rabitem.main.player.instances.Felix;
 
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -49,7 +49,7 @@ public class Bot implements MySqlUtil{
         }
         String query = "insert into holsdergeier.bot(Name)\n" +
                 "values(\"" + Objects.requireNonNull(this.owner.getName()) + "\");";
-        RabitemBot.mySql.update(query);
+        Felix.mySql.update(query);
     }
 
     public void setLastPlayed(Timestamp timestamp) {
@@ -60,7 +60,7 @@ public class Bot implements MySqlUtil{
         String query = "update holsdergeier.bot " +
                 "set LastPlayedAgainst = \"" + timestamp +  "\" " +
                 "where Name = \"" + this.owner.getName() + "\";";
-        RabitemBot.mySql.update(query);
+        Felix.mySql.update(query);
     }
 
     public void addWin() {
