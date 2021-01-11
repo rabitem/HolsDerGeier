@@ -5,7 +5,7 @@ import de.rabitem.main.HolsDerGeierUtil;
 import de.rabitem.main.card.instances.PlayerCard;
 import de.rabitem.main.player.Player;
 
-class Cheyenne extends Player {
+public class Cheyenne extends Player {
     private ArrayList<Integer> myCards = new ArrayList<Integer>();
     private ArrayList<Integer> enemyCards = new ArrayList<Integer>();
     private ArrayList<Integer> gameCards = new ArrayList<Integer>();

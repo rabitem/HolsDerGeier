@@ -1,7 +1,6 @@
 package de.rabitem.main.player.instances;
 
 import de.rabitem.main.HolsDerGeierUtil;
-import de.rabitem.main.Main;
 import de.rabitem.main.card.instances.PlayerCard;
 import de.rabitem.main.player.Player;
 import de.rabitem.main.player.rabitembot.MySql;
@@ -12,7 +11,6 @@ import de.rabitem.main.player.rabitembot.objects.RabitemUtil;
 import de.rabitem.main.util.Util;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -160,6 +158,7 @@ public class Felix extends Player {
     @Override
     public PlayerCard getNextCardFromPlayer(int pointCardValue) {
         this.pointCardValue = pointCardValue;
+
         // if custom strategy...
         if (this.enabledCustomTactic && !Objects.isNull(this.getHighestProbability(pointCardValue))) {
             // output - debug related setup
@@ -169,96 +168,167 @@ public class Felix extends Player {
             Card card = this.getHighestProbability(pointCardValue);
             if (Objects.isNull(card)) {
                 this.enabledCustomTactic = false;
-                return staticStreategy(pointCardValue);
+                return staticStrategy(pointCardValue);
             }
             int highestValue = card.getValue();
+            double probability = card.getProbability(pointCardValue);
 
-            switch (pointCardValue) {
-                case 10, 9, 8 -> {
-                    for (int i = 0; i < 3; i++) {
-                        if (highestValue < 13 || highestValue + i == 15)
-                            return getCardsInArray(13, 15);
+            if (pointCardValue > 7) {
+                if (highestValue < 13 && probability > .333)
+                    return getCardsInArray(13, 15);
 
-                        if (this.canUse(new PlayerCard(highestValue + i))) {
-                            return new PlayerCard(highestValue + i);
-                        }
+                if (probability > .333) {
+                    switch (pointCardValue) {
+                        case 10:
+                            // most bots just use 15 if pointcardvlue is 10. Pretend this behaviour and win 8 && 9 instead
+                            if (highestValue == 15) return new PlayerCard(13);
+                        case 9:
+                            if (highestValue < 15) return new PlayerCard(15);
+                        case 8:
+                            if (highestValue < 14) return new PlayerCard(14);
                     }
                 }
-                case 7, 6, 5 -> getCardsInArray(10, 12);
-                case 4, 3, 2 -> getCardsInArray(7, 9);
-                case 1, -1, -2, -3, -4, -5 -> getCardsInArray(1, 6);
-                default -> {
-                    return null;
+                for (int i = 1; i < 3; i++) {
+                    if (this.canUse(new PlayerCard(highestValue + i))) {
+                        return new PlayerCard(highestValue + i);
+                    } else if (highestValue == pointCardValue + 5) {
+                        if (this.canUse(new PlayerCard(highestValue)))
+                            return new PlayerCard(highestValue);
+                    }
+                }
+            } else if (pointCardValue > 4) { // 5,6,7
+                if (probability > .8) {
+                    if (highestValue < 10)
+                        return getCardsInArray(10, 12);
+
+                    switch (pointCardValue) {
+                        case 7:
+                            if (highestValue == 12) return new PlayerCard(10);
+                        case 6:
+                            if (highestValue < 12) return new PlayerCard(12);
+                        case 5:
+                            if (highestValue < 11) return new PlayerCard(11);
+                    }
+                }
+            } else if (pointCardValue > 1) { // 2, 3, 4
+                if (probability > .8) {
+                    if (highestValue < 7)
+                        return getCardsInArray(7, 9);
+
+                    switch (pointCardValue) {
+                        case 7:
+                            if (highestValue == 9) return new PlayerCard(7);
+                        case 6:
+                            if (highestValue < 9) return new PlayerCard(9);
+                        case 5:
+                            if (highestValue < 8) return new PlayerCard(8);
+                    }
+                }
+            } else if (pointCardValue > -3) { // 1, -1, -2
+                if (probability > .333) {
+                    if (highestValue > 4)
+                        return getCardsInArray(1, 3);
+
+                    switch (pointCardValue) {
+                        case 7:
+                            if (highestValue == 3) return new PlayerCard(1);
+                        case 6:
+                            if (highestValue < 3) return new PlayerCard(3);
+                        case 5:
+                            if (highestValue < 2) return new PlayerCard(2);
+                    }
+                }
+            }else { // -3, -4, -5
+                if (probability > .333) {
+                    if (highestValue < 4)
+                        return getCardsInArray(4, 6);
+
+                    switch (pointCardValue) {
+                        case -5:
+                            if (highestValue == 6)
+                                return new PlayerCard(4);
+                            else
+                                return new PlayerCard(6);
+                        case -4:
+                            if (highestValue < 6 && this.canUse(new PlayerCard(6)))
+                                return new PlayerCard(6);
+                            else
+                                return new PlayerCard(5);
+                        case 03:
+                            if (highestValue < 5 && this.canUse(new PlayerCard(5)))
+                                return new PlayerCard(5);
+                            else
+                                return new PlayerCard(4);
+                    }
                 }
             }
-
+        }
+            // static strategy if no strategy found or not enough games played
+            return staticStrategy(pointCardValue);
         }
 
-        // static strategy if no strategy found or not enough games played
-        return staticStreategy(pointCardValue);
-    }
+        /**
+         * Checks if the card in a specific array can be used
+         *
+         * @param highestValue int highestValue
+         * @param to           int to
+         * @return boolean canUseCardInArray
+         */
+        public boolean validateMore ( int highestValue, int to){
+            boolean canUseCardInArray = false;
 
-    /**
-     * Checks if the card in a specific array can be used
-     *
-     * @param highestValue int highestValue
-     * @param to           int to
-     * @return boolean canUseCardInArray
-     */
-    public boolean validateMore(int highestValue, int to) {
-        boolean canUseCardInArray = false;
-
-        for (int i = highestValue + 1; i < to; i++) {
-            canUseCardInArray = this.canUse(new PlayerCard(i));
-            if (canUseCardInArray)
-                break;
-        }
-        return canUseCardInArray;
-    }
-
-    /**
-     * static strategy, simple switch - case with some randomness
-     *
-     * @param pointCardValue int pointCardValue
-     * @return PlayerCard
-     */
-    private PlayerCard staticStreategy(int pointCardValue) {
-        return switch (pointCardValue) {
-            case 10, 9, 8 -> getCardsInArray(13, 15);
-            case 7, 6, 5 -> getCardsInArray(10, 12);
-            case 4, 3, 2 -> getCardsInArray(7, 9);
-            case 1, -1, -2, -3, -4, -5 -> getCardsInArray(1, 6);
-            default -> null;
-        };
-    }
-
-    /**
-     * Returns a PlayerCard with value in an specific range
-     *
-     * @param from int from
-     * @param to   int to
-     * @return Card in Array
-     */
-    private PlayerCard getCardsInArray(int from, int to) {
-        PlayerCard playerCard = new PlayerCard(Util.random(from, to));
-        return this.canUse(playerCard) ? playerCard : this.getCardsInArray(from, to);
-    }
-
-    /**
-     * Checks for the Card with the highest Probability
-     *
-     * @param pointCardValue int
-     * @return Card
-     */
-    private Card getHighestProbability(int pointCardValue) {
-        Card card1 = null;
-        double highestProperty = 0;
-        for (Card card : this.playedCards.getCards()) {
-            if (card.getProbability(pointCardValue) >= highestProperty) {
-                highestProperty = card.getProbability(pointCardValue);
-                card1 = card;
+            for (int i = highestValue + 1; i < to; i++) {
+                canUseCardInArray = this.canUse(new PlayerCard(i));
+                if (canUseCardInArray)
+                    break;
             }
+            return canUseCardInArray;
         }
-        return card1;
+
+        /**
+         * static strategy, simple switch - case with some randomness
+         *
+         * @param pointCardValue int pointCardValue
+         * @return PlayerCard
+         */
+        private PlayerCard staticStrategy ( int pointCardValue){
+            return switch (pointCardValue) {
+                case 10, 9, 8 -> getCardsInArray(13, 15);
+                case 7, 6, 5 -> getCardsInArray(10, 12);
+                case 4, 3, 2 -> getCardsInArray(7, 9);
+                case 1, -1, -2 -> getCardsInArray(1, 3);
+                case -3, -4, -5 -> getCardsInArray(4, 6);
+                default -> throw new IllegalStateException("Unexpected value: " + pointCardValue);
+            };
+        }
+
+        /**
+         * Returns a PlayerCard with value in an specific range
+         *
+         * @param from int from
+         * @param to   int to
+         * @return Card in Array
+         */
+        private PlayerCard getCardsInArray ( int from, int to){
+            PlayerCard playerCard = new PlayerCard(Util.random(from, to));
+            return this.canUse(playerCard) ? playerCard : this.getCardsInArray(from, to);
+        }
+
+        /**
+         * Checks for the Card with the highest Probability
+         *
+         * @param pointCardValue int
+         * @return Card
+         */
+        private Card getHighestProbability ( int pointCardValue){
+            Card card1 = null;
+            double highestProperty = 0;
+            for (Card card : this.playedCards.getCards()) {
+                if (card.getProbability(pointCardValue) >= highestProperty) {
+                    highestProperty = card.getProbability(pointCardValue);
+                    card1 = card;
+                }
+            }
+            return card1;
+        }
     }
-}

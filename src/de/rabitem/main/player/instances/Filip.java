@@ -136,8 +136,8 @@ public class Filip extends Player {
             case 10, 9, 8 -> getRandomFromTo(13, 15);
             case 7, 6, 5 -> getRandomFromTo(10, 12);
             case 4, 3, 2 -> getRandomFromTo(7, 9);
-            case 1, -1, -2 -> getRandomFromTo(4, 6);
-            case -3, -4, -5 -> getRandomFromTo(1, 3);
+            case 1, -1, -2 -> getRandomFromTo(1, 3);
+            case -3, -4, -5 -> getRandomFromTo(4, 6);
             default -> null;
         };
 

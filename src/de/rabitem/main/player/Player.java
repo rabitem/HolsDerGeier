@@ -94,6 +94,7 @@ public abstract class Player {
             cards.remove(c);
             // lastMove = c;
         } else {
+            System.out.println("Error while removing Card from " + this.getName());
             throw new IllegalMoveException("This move is not permitted! You already used this card...");
         }
 

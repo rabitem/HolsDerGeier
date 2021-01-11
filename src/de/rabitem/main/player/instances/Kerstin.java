@@ -13,7 +13,7 @@ import de.rabitem.main.util.Util;
  * @author Kerstin
  *
  */
-public class KerstinLenz extends Player {
+public class Kerstin extends Player {
 	
 	// Status of game
 	boolean newGame = true;
@@ -31,7 +31,7 @@ public class KerstinLenz extends Player {
 	 * 
 	 * @param name
 	 */
-	public KerstinLenz(String name) {
+	public Kerstin(String name) {
 		super(name);
 	}
 
