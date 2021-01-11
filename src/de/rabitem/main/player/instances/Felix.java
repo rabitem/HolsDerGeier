@@ -32,9 +32,6 @@ public class Felix extends Player {
 
     int pointCardValue;
 
-    // mostlikelyenemycards
-    private final ArrayList<PlayerCard> mostLikelyCards = new ArrayList<>();
-
     // works only with PointCards from 1..15 and 2 Player
 
     /**
@@ -131,7 +128,6 @@ public class Felix extends Player {
             enemyBot.addLose();
         }
 
-        this.mostLikelyCards.clear();
         // output - debug related setup
         RabitemUtil.outputMessage("Successfully mapped Stats after Round");
     }
