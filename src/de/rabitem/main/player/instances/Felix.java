@@ -244,24 +244,6 @@ public class Felix extends Player {
     }
 
     /**
-     * Checks if the card in a specific array can be used
-     *
-     * @param highestValue int highestValue
-     * @param to           int to
-     * @return boolean canUseCardInArray
-     */
-    public boolean validateMore(int highestValue, int to) {
-        boolean canUseCardInArray = false;
-
-        for (int i = highestValue + 1; i < to; i++) {
-            canUseCardInArray = this.canUse(new PlayerCard(i));
-            if (canUseCardInArray)
-                break;
-        }
-        return canUseCardInArray;
-    }
-
-    /**
      * static strategy, simple switch - case with some randomness
      *
      * @param pointCardValue int pointCardValue
