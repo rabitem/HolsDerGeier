@@ -178,7 +178,7 @@ public class Felix extends Player {
                     return getCardsInArray(13, 15);
 
                 if (probability > .333) {
-                    switch (pointCardValue) {
+                    switch (pointCardValue) { // todo use if instead of switch here since there is no default behaviour
                         case 10:
                             // most bots just use 15 if pointcardvlue is 10. Pretend this behaviour and win 8 && 9 instead
                             if (highestValue == 15 && this.canUse(new PlayerCard(13))) return new PlayerCard(13);
