@@ -42,7 +42,7 @@ public class Nico extends de.rabitem.main.player.Player {
     public PlayerCard getNextCardFromPlayer(final int pointCardValue) {
     	int value = pointCardValue;
     	//pr�fen ob Unentschieden letzte Runde
-    	if (lastMove != null) {
+    	if (lastMove != null && lastMoveEnemy != null) {
 	    	if (first) {
 	    		if (oponnents.get(0).getLastMove().getValue() == lastMove.getValue()) {//pr�fen ob es als 1. und als 2. Spieler funktioniert
 	    			value += lastpoints;

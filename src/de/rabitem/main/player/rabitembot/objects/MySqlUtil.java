@@ -30,8 +30,8 @@ public interface MySqlUtil {
         ResultSet resultSet = Felix.mySql.query(query);
         try {
             output = resultSet.getObject(s2, clazz);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException throwable) {
+            throwable.printStackTrace();
         }
         return output;
     }

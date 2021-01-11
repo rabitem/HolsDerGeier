@@ -8,7 +8,10 @@ import java.sql.*;
 public class MySql {
 
     private Connection con;
-    private String host, database, user, password;
+    private final String host;
+    private final String database;
+    private final String user;
+    private final String password;
 
     public MySql(String host, String database, String user, String password) {
         this.host = host;
@@ -41,6 +44,7 @@ public class MySql {
 
     public void update(String qry) {
         // System.out.println(qry);
+
         try {
             try (Statement st = con.createStatement()) {
                 st.executeUpdate(qry);
@@ -52,6 +56,8 @@ public class MySql {
     }
 
     public ResultSet query(String qry) {
+        // System.out.println(qry);
+
         if (con == null)
             Felix.mySql.connect();
         ResultSet rs = null;
